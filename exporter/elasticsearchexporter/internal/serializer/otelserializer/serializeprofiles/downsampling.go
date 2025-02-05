@@ -82,6 +82,10 @@ const (
 
 var eventIndices = initEventIndexes(MaxEventsIndexes)
 
+// A fixed seed is used for deterministic tests and development.
+// There is no downside in using a fixed seed in production.
+var rnd = rand.New(rand.NewPCG(0, 0))
+
 // initEventIndexes initializes eventIndexes to avoid calculations for every TraceEvent later.
 func initEventIndexes(count int) []string {
 	indices := make([]string, 0, count)
@@ -111,7 +115,7 @@ func IndexDownsampledEvent(event StackTraceEvent, pushData func(any, string, str
 		for range event.Count {
 			// samplingRatio is the probability p=0.2 for an event to be copied into the next
 			// downsampled index.
-			if rand.Float64() < SamplingRatio {
+			if rnd.Float64() < SamplingRatio {
 				count++
 			}
 		}
