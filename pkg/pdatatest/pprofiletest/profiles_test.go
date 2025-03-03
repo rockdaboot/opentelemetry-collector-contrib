@@ -41,16 +41,43 @@ func TestCompareProfiles(t *testing.T) {
 		{
 			name: "equal",
 			expected: func() pprofile.Profiles {
-				p := pprofile.NewProfiles()
-				rl := p.ResourceProfiles().AppendEmpty()
-				rl.Resource().Attributes().PutStr("key1", "value1")
-				l := rl.ScopeProfiles().AppendEmpty().Profiles().AppendEmpty()
-				attr := l.AttributeTable().AppendEmpty()
-				attr.SetKey("scope-attr1")
-				attr.Value().SetStr("value1")
-				l.AttributeIndices().Append(0)
-				l.SetProfileID(pprofile.NewProfileIDEmpty())
-				return p
+				return Profiles{
+					ResourceProfiles: []ResourceProfile{
+						{
+							Resource: Resource{
+								Attributes: map[string]string{
+									"key1": "value1",
+								},
+							},
+							ScopeProfiles: []ScopeProfile{
+								{
+									Profile: []Profile{
+										{
+											attributes: []Attribute{
+												{
+													"scope-attr1", "value1",
+												},
+											},
+											profileID: pprofile.NewProfileIDEmpty(),
+										},
+									},
+								},
+							},
+						},
+					},
+				}.Transform()
+				/*
+					p := pprofile.NewProfiles()
+					rl := p.ResourceProfiles().AppendEmpty()
+					rl.Resource().Attributes().PutStr("key1", "value1")
+					l := rl.ScopeProfiles().AppendEmpty().Profiles().AppendEmpty()
+					attr := l.AttributeTable().AppendEmpty()
+					attr.SetKey("scope-attr1")
+					attr.Value().SetStr("value1")
+					l.AttributeIndices().Append(0)
+					l.SetProfileID(pprofile.NewProfileIDEmpty())
+					return p
+				*/
 			}(),
 			actual: func() pprofile.Profiles {
 				p := pprofile.NewProfiles()
