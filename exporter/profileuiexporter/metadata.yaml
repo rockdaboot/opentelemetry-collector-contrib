@@ -1,0 +1,9 @@
+type: profileui
+
+status:
+  class: exporter
+  stability:
+    development: [profiles]
+  distributions: [contrib]
+  codeowners:
+    active: [] # TODO: Add GitHub username here

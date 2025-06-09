@@ -1,0 +1,34 @@
+receivers:
+  profiling:
+    SamplesPerSecond: 19
+
+processors:
+  resourcedetection:
+    detectors: [system]
+    system:
+      hostname_sources: ["os"]
+      resource_attributes:
+        host.id:
+          enabled: true
+        host.name:
+          enabled: true
+        os.type:
+          enabled: true
+
+exporters:
+  profileui:
+    http_port: 8080
+  debug:
+    verbosity: detailed
+
+service:
+  telemetry:
+    metrics:
+      address: "localhost:0"
+    logs:
+      level: debug
+  pipelines:
+    profiles:
+      receivers: [profiling]
+      processors: [resourcedetection]
+      exporters: [profileui]
